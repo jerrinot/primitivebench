@@ -37,6 +37,11 @@ public class UnsafeIntList implements IntList, AutoCloseable {
         return UNSAFE.getInt(baseAddress + offset);
     }
 
+    public long elementAsLong(int position) {
+        int offset = position * 4;
+        return UNSAFE.getLong(baseAddress + offset);
+    }
+
     @Override
     public int size() {
         return size;
@@ -44,7 +49,8 @@ public class UnsafeIntList implements IntList, AutoCloseable {
 
     private void resize() {
         int newCapacity = capacity * 2;
-        long newAddress = UNSAFE.allocateMemory(newCapacity * 4);
+        long newSizeBytes = newCapacity * 4;
+        long newAddress = UNSAFE.allocateMemory(newSizeBytes);
         UNSAFE.copyMemory(baseAddress, newAddress, capacity * 4);
         UNSAFE.freeMemory(baseAddress);
         baseAddress = newAddress;
