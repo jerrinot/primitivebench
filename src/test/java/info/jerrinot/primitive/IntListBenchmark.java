@@ -7,6 +7,7 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.profile.LinuxPerfAsmProfiler;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -17,7 +18,7 @@ import java.util.Random;
 @State(Scope.Benchmark)
 public class IntListBenchmark {
 
-    private static final int MAXIMUM_VALUE = 10;
+    private static final int MAXIMUM_VALUE = 1_000_000;
     private static final int ITEM_COUNT = 10_000_000;
 
     @Param({"ARRAY", "UNSAFE", "HEAP_BB", "DIRECT_BB"})
@@ -38,7 +39,7 @@ public class IntListBenchmark {
     @Setup
     public void setUp() {
         createLists();
-        r = new Random();
+        r = new Random(0);
         loadInitialData();
     }
 
@@ -86,6 +87,7 @@ public class IntListBenchmark {
                 .warmupIterations(5)
                 .measurementIterations(5)
                 .threads(1)
+                .addProfiler(LinuxPerfAsmProfiler.class)
                 .forks(2)
                 .build();
 

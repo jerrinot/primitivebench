@@ -2,9 +2,11 @@ package info.jerrinot.primitive.impl;
 
 import info.jerrinot.primitive.IntList;
 
+import java.io.IOException;
+
 import static info.jerrinot.primitive.utils.UnsafeUtils.UNSAFE;
 
-class UnsafeIntList implements IntList {
+public class UnsafeIntList implements IntList, AutoCloseable {
 
     private int capacity;
     private int size;
@@ -47,5 +49,10 @@ class UnsafeIntList implements IntList {
         UNSAFE.freeMemory(baseAddress);
         baseAddress = newAddress;
         capacity = newCapacity;
+    }
+
+    @Override
+    public void close() throws IOException {
+        UNSAFE.freeMemory(baseAddress);
     }
 }
