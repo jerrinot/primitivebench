@@ -8,8 +8,8 @@ import java.nio.IntBuffer;
 public class ByteBufferIntList implements IntList {
     private IntBuffer buffer;
 
-    public ByteBufferIntList(int initialCapacity) {
-        buffer = ByteBuffer.allocateDirect(initialCapacity * 4).asIntBuffer();
+    public ByteBufferIntList(int initialCapacity, boolean direct) {
+        buffer = newIntBufferWithCapacity(initialCapacity, direct);
     }
 
     @Override
@@ -32,10 +32,16 @@ public class ByteBufferIntList implements IntList {
 
     private void resize() {
         int newCapacity = buffer.capacity() * 2;
-        IntBuffer newBuffer = ByteBuffer.allocateDirect(newCapacity * 4).asIntBuffer();
+        boolean isDirect = buffer.isDirect();
+        IntBuffer newBuffer = newIntBufferWithCapacity(newCapacity, isDirect);
         buffer.flip();
         newBuffer.put(buffer);
         buffer = newBuffer;
+    }
 
+    private IntBuffer newIntBufferWithCapacity(int capacity, boolean direct) {
+        int sizeBytes = capacity * 4;
+        ByteBuffer bb = direct ? ByteBuffer.allocateDirect(sizeBytes) : ByteBuffer.allocate(sizeBytes);
+        return bb.asIntBuffer();
     }
 }

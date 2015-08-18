@@ -2,6 +2,7 @@ package info.jerrinot.primitive;
 
 import info.jerrinot.primitive.impl.ArrayIntList;
 import info.jerrinot.primitive.impl.ByteBufferIntList;
+import info.jerrinot.primitive.impl.UnsafeIntList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Param;
@@ -22,7 +23,7 @@ public class IntListBenchmark {
     private static final int MAXIMUM_VALUE = 10;
     private static final int ITEM_COUNT = 10_000_000;
 
-    @Param({"array", "bytebuffer", "unsafe"})
+    @Param({"array", "bb", "directbb", "unsafe"})
     private String method;
 
     private IntList list1;
@@ -59,13 +60,17 @@ public class IntListBenchmark {
                 list1 = new ArrayIntList(ITEM_COUNT);
                 list2 = new ArrayIntList(ITEM_COUNT);
                 break;
-            case "bytebuffer":
-                list1 = new ByteBufferIntList(ITEM_COUNT);
-                list2 = new ByteBufferIntList(ITEM_COUNT);
+            case "bb":
+                list1 = new ByteBufferIntList(ITEM_COUNT, false);
+                list2 = new ByteBufferIntList(ITEM_COUNT, false);
+                break;
+            case "directbb":
+                list1 = new ByteBufferIntList(ITEM_COUNT, true);
+                list2 = new ByteBufferIntList(ITEM_COUNT, true);
                 break;
             case "unsafe":
-                list1 = new ByteBufferIntList(ITEM_COUNT);
-                list2 = new ByteBufferIntList(ITEM_COUNT);
+                list1 = new UnsafeIntList(ITEM_COUNT);
+                list2 = new UnsafeIntList(ITEM_COUNT);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown mode: " + method);
