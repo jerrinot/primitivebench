@@ -2,12 +2,12 @@ package info.jerrinot.primitive.impl;
 
 import info.jerrinot.primitive.IntList;
 
-public class ArrayIntList implements IntList {
+class ArrayIntList implements IntList {
     private int size;
     private int capacity;
     private int[] array;
 
-    public ArrayIntList(int initialCapacity) {
+    ArrayIntList(int initialCapacity) {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException("Capacity must be a positive number.");
         }

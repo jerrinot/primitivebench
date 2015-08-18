@@ -5,10 +5,10 @@ import info.jerrinot.primitive.IntList;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-public class ByteBufferIntList implements IntList {
+class ByteBufferIntList implements IntList {
     private IntBuffer buffer;
 
-    public ByteBufferIntList(int initialCapacity, boolean direct) {
+    ByteBufferIntList(int initialCapacity, boolean direct) {
         buffer = newIntBufferWithCapacity(initialCapacity, direct);
     }
 

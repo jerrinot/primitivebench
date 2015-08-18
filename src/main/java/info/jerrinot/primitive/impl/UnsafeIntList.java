@@ -4,14 +4,14 @@ import info.jerrinot.primitive.IntList;
 
 import static info.jerrinot.primitive.utils.UnsafeUtils.UNSAFE;
 
-public class UnsafeIntList implements IntList {
+class UnsafeIntList implements IntList {
 
     private int capacity;
     private int size;
 
     private long baseAddress;
 
-    public UnsafeIntList(int initialCapacity) {
+    UnsafeIntList(int initialCapacity) {
         this.capacity = initialCapacity;
         baseAddress = UNSAFE.allocateMemory(initialCapacity * 4);
     }
